@@ -11,6 +11,13 @@ import { TransactionDialogComponent } from '../transaction-dialog/transaction-di
 })
 export class TransactionListComponent implements OnInit {
   transacoes: Transaction[] = [];
+  transacoesValues: Transaction[] = [];
+  tipos: any[] = [
+    { id: 0, descricao: 'Nennhum' },
+    { id: 1, descricao: 'Receita' },
+    { id: 2, descricao: 'Despesa' },
+  ];
+  selectedTipoId: number | undefined = undefined;
   errorMessage: string | null = null;
   displayedColumns: string[] = [
     'tipo',
@@ -30,17 +37,34 @@ export class TransactionListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getTransactionsValues();
     this.getTransaction();
   }
 
   getTransaction(orderData: 'asc' | 'desc' = 'desc'): void {
-    this.transactionService.getTransacoes(orderData).subscribe((data) => {
-      this.transacoes = data.map((transacao: Transaction) => ({
+    this.transactionService
+      .getTransacoes(orderData, this.selectedTipoId)
+      .subscribe((data) => {
+        this.transacoes = data.map((transacao: Transaction) => ({
+          ...transacao,
+          valor: transacao.valor,
+        }));
+        this.calculaTotais();
+      });
+  }
+
+  getTransactionsValues(): void {
+    this.transactionService.getTransacoes().subscribe((data) => {
+      this.transacoesValues = data.map((transacao: Transaction) => ({
         ...transacao,
         valor: transacao.valor,
       }));
       this.calculaTotais();
     });
+  }
+
+  onFilterChange() {
+    this.getTransaction();
   }
 
   openDialog(transacao?: Transaction): void {
@@ -69,7 +93,7 @@ export class TransactionListComponent implements OnInit {
     this.totalDespesas = 0;
     this.quantidadeTransacoes = this.transacoes.length;
 
-    this.transacoes.forEach((transacao) => {
+    this.transacoesValues.forEach((transacao) => {
       const valorNumerico = parseFloat(transacao.valor);
 
       if (transacao.tipo.descricao === 'Receita') {

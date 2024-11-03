@@ -13,8 +13,16 @@ export class TransactionService {
   constructor(private http: HttpClient) {}
 
   // Método para listar todas as transações
-  getTransacoes(orderData: 'asc' | 'desc' = 'desc'): Observable<Transaction[]> {
-    const params = new HttpParams().set('orderData', orderData);
+  getTransacoes(
+    orderData: 'asc' | 'desc' = 'desc',
+    tipoId?: number
+  ): Observable<Transaction[]> {
+    let params = new HttpParams().set('orderData', orderData);
+
+    if (tipoId) {
+      params = params.set('tipo', tipoId.toString());
+    }
+
     return this.http.get<any>(this.apiUrl, { params });
   }
 

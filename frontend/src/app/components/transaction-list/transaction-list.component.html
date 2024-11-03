@@ -43,7 +43,8 @@
     <!-- Coluna Valor -->
     <ng-container matColumnDef="valor">
       <mat-header-cell *matHeaderCellDef> Valor </mat-header-cell>
-      <mat-cell *matCellDef="let transacao"> {{ transacao.tipo.descricao === 'Despesa' ? '-' + (transacao.valor | currency) : (transacao.valor | currency) }} </mat-cell>
+      <mat-cell *matCellDef="let transacao"> {{ transacao.tipo.descricao === 'Despesa' ? '-' + (transacao.valor |
+        currency) : (transacao.valor | currency) }} </mat-cell>
     </ng-container>
 
     <!-- Coluna Data -->
@@ -58,7 +59,16 @@
 
     <!-- Coluna Categoria -->
     <ng-container matColumnDef="categoria">
-      <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        <mat-form-field appearance="outline" style="padding-top: 20px; width: 175px;">
+          <mat-label>Filtrar por Tipo</mat-label>
+          <mat-select [(value)]="selectedTipoId" (selectionChange)="onFilterChange()">
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo.id">
+              {{ tipo.descricao }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-header-cell>
       <mat-cell *matCellDef="let transacao"> {{ transacao.tipo.descricao }} </mat-cell>
     </ng-container>
 

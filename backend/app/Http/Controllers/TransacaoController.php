@@ -10,8 +10,12 @@ class TransacaoController extends Controller
     public function index(Request $request)
     {
         $orderData = $request->query('orderData', 'desc');
+        $tipoId = $request->query('tipo');
 
         $transacoes = Transacao::with(['tipo', 'categoria'])
+            ->when($tipoId, function($query) use ($tipoId) {
+                return $query->where('tipo', $tipoId);
+            })
             ->orderBy('data', $orderData)
             ->get()
             ->map(function ($transacao) {
