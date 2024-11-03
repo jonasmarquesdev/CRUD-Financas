@@ -67,6 +67,10 @@ class TransacaoController extends Controller
                 'data' => 'required|date',
             ]);
 
+            if ($validatedData['tipo'] == 2) {
+                $validatedData['valor'] = -abs($validatedData['valor']);
+            }
+
             $transacao->update(array_filter($validatedData));
 
             return response()->json($transacao);
