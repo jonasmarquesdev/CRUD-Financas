@@ -1,0 +1,27 @@
+# Ignorar arquivos do Node.js
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Ignorar arquivos de build do Angular
+dist/
+out-tsc/
+.tmp/
+coverage/
+.vscode
+
+# Ignorar arquivos de configuração do Angular
+.angular/
+
+# Ignorar arquivos do Laravel
+/vendor/
+.env
+*.log
+public/storage
+storage/*.key
+Homestead.yaml
+Homestead.json
+
+# Ignorar arquivos de cache
+*.cache
+*.phpunit.result.cache
