@@ -13,7 +13,11 @@ class TransacaoController extends Controller
 
         $transacoes = Transacao::with(['tipo', 'categoria'])
             ->orderBy('data', $orderData)
-            ->get();
+            ->get()
+            ->map(function ($transacao) {
+                $transacao->valor = abs($transacao->valor);
+                return $transacao;
+            });
 
         return response()->json($transacoes);
     }
