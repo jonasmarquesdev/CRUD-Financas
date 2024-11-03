@@ -123,6 +123,7 @@ Antes de iniciar a API, você precisa configurar o arquivo `.env` com os detalhe
 A aplicação se comunica com a seguinte API para operações de transações financeiras:
 
 - **GET** `/api/transacoes`: Retorna todas as transações.
+- **GET** `/api/transacoes/:id`: Retorna uma transação específica pelo ID.
 - **POST** `/api/transacoes`: Adiciona uma nova transação.
 - **PUT** `/api/transacoes/:id`: Atualiza uma transação existente.
 - **DELETE** `/api/transacoes/:id`: Exclui uma transação.

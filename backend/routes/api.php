@@ -19,6 +19,7 @@ Route::get('/test-db', function () {
 });
 
 Route::get('/transacoes', [TransacaoController::class, 'index']);
+Route::get('/transacoes/{id}', [TransacaoController::class, 'show']);
 Route::post('/transacoes', [TransacaoController::class, 'store']);
 Route::put('/transacoes/{id}', [TransacaoController::class, 'update']);
 Route::delete('/transacoes/{id}', [TransacaoController::class, 'destroy']);

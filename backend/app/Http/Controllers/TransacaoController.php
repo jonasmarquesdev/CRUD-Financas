@@ -22,6 +22,17 @@ class TransacaoController extends Controller
         return response()->json($transacoes);
     }
 
+    public function show($id)
+    {
+        $transacao = Transacao::with(['tipo', 'categoria'])->find($id);
+
+        if (!$transacao) {
+            return response()->json(['message' => 'Transação não encontrada'], 404);
+        }
+
+        return response()->json($transacao);
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
