@@ -16,7 +16,6 @@ Este projeto é uma aplicação de gerenciamento de transações financeiras des
 - Adição de novas transações através de um formulário.
 - Edição de transações existentes.
 - Exclusão de transações.
-- Ordenação das transações por data.
 
 ## Estrutura do Projeto
 ```
