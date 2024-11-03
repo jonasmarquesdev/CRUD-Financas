@@ -11,8 +11,6 @@ import { TransactionDialogComponent } from '../transaction-dialog/transaction-di
 })
 export class TransactionListComponent implements OnInit {
   transacoes: Transaction[] = [];
-  filteredTransactions: Transaction[] = [];
-  sortOrderData: 'asc' | 'desc' = 'desc';
   errorMessage: string | null = null;
   displayedColumns: string[] = [
     'tipo',
@@ -45,19 +43,22 @@ export class TransactionListComponent implements OnInit {
     });
   }
 
-  toggleSortOrderByDate(): void {
-    this.sortOrderData = this.sortOrderData === 'desc' ? 'asc' : 'desc';
-    this.getTransaction(this.sortOrderData);
-  }
-
-  openDialog(): void {
+  openDialog(transacao?: Transaction): void {
     const dialogRef = this.dialog.open(TransactionDialogComponent, {
       width: '600px',
+      data: transacao,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.transacoes.push(result);
+        if (transacao) {
+          const index = this.transacoes.findIndex((t) => t.id === result.id);
+          if (index > -1) {
+            this.transacoes[index] = result;
+          }
+        } else {
+          this.transacoes.push(result);
+        }
         this.getTransaction();
       }
     });
@@ -71,16 +72,12 @@ export class TransactionListComponent implements OnInit {
     this.transacoes.forEach((transacao) => {
       const valorNumerico = parseFloat(transacao.valor);
 
-      console.log('Transação: ', transacao);
       if (transacao.tipo.descricao === 'Receita') {
         this.totalReceitas += valorNumerico;
       } else if (transacao.tipo.descricao === 'Despesa') {
         this.totalDespesas += valorNumerico;
       }
     });
-
-    console.log('Total Receitas: ', this.totalReceitas);
-    console.log('Total Despesas: ', this.totalDespesas);
   }
 
   deleteTransaction(id: number) {

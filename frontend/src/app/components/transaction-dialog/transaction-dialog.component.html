@@ -23,8 +23,8 @@
       <mat-form-field appearance="fill" style="width: 100%;">
         <mat-label>Tipo</mat-label>
         <mat-select formControlName="tipo" required>
-          <mat-option value="1">Receita</mat-option>
-          <mat-option value="2">Despesa</mat-option>
+          <mat-option [value]="1">Receita</mat-option>
+          <mat-option [value]="2">Despesa</mat-option>
         </mat-select>
         <mat-error *ngIf="transactionForm.get('tipo')?.invalid">
           Tipo é obrigatório.
@@ -34,10 +34,10 @@
       <mat-form-field appearance="fill" style="width: 100%;">
         <mat-label>Categoria</mat-label>
         <mat-select formControlName="categoria" required>
-          <mat-option value="1">Aluguel</mat-option>
-          <mat-option value="2">Pagamento</mat-option>
-          <mat-option value="3">Prolabore</mat-option>
-          <mat-option value="4">Outros</mat-option>
+          <mat-option [value]="1">Aluguel</mat-option>
+          <mat-option [value]="2">Pagamento</mat-option>
+          <mat-option [value]="3">Prolabore</mat-option>
+          <mat-option [value]="4">Outros</mat-option>
         </mat-select>
         <mat-error *ngIf="transactionForm.get('categoria')?.invalid">
           Categoria é obrigatória.

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Transaction } from 'src/app/models/transaction.model';
 import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
@@ -10,17 +11,26 @@ import { TransactionService } from 'src/app/services/transaction.service';
 })
 export class TransactionDialogComponent {
   transactionForm: FormGroup;
+  isEditMode: boolean;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TransactionDialogComponent>,
     private transactionService: TransactionService,
+    @Inject(MAT_DIALOG_DATA) public data: Transaction
   ) {
+    this.isEditMode = !!data;
     this.transactionForm = this.fb.group({
-      valor: ['', [Validators.required, Validators.min(0)]],
-      data: ['', Validators.required],
-      tipo: ['', Validators.required],
-      categoria: ['', Validators.required],
+      valor: [
+        this.isEditMode ? data.valor : '',
+        [Validators.required, Validators.min(0)],
+      ],
+      data: [this.isEditMode ? new Date(data.data + 'Z') : '', Validators.required],
+      tipo: [this.isEditMode ? data.tipo.id : '', Validators.required],
+      categoria: [
+        this.isEditMode ? data.categoria.id : '',
+        Validators.required,
+      ],
     });
   }
 
@@ -33,14 +43,27 @@ export class TransactionDialogComponent {
         categoria: Number(this.transactionForm.value.categoria),
       };
 
-      this.transactionService.putTransacao(newTransaction).subscribe(
-        (response) => {
-          this.dialogRef.close(newTransaction);
-        },
-        (error) => {
-          console.error('Erro ao adicionar transação', error);
-        }
-      );
+      if (this.isEditMode) {
+        this.transactionService
+          .putTransacao(this.data.id, newTransaction)
+          .subscribe(
+            (response) => {
+              this.dialogRef.close(newTransaction);
+            },
+            (error) => {
+              console.error('Erro ao adicionar transação', error);
+            }
+          );
+      } else {
+        this.transactionService.postTransacao(newTransaction).subscribe(
+          (response) => {
+            this.dialogRef.close(newTransaction);
+          },
+          (error) => {
+            console.error('Erro ao adicionar transação', error);
+          }
+        );
+      }
     }
   }
 

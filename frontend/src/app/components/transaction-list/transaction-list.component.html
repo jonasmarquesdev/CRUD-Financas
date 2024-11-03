@@ -20,7 +20,7 @@
   <mat-card class="card">
     <mat-card-title>Total de Despesas</mat-card-title>
     <mat-card-content>
-      <h2>{{ totalDespesas | currency }}</h2>
+      <h2>-{{ totalDespesas | currency }}</h2>
     </mat-card-content>
   </mat-card>
 
@@ -43,16 +43,13 @@
     <!-- Coluna Valor -->
     <ng-container matColumnDef="valor">
       <mat-header-cell *matHeaderCellDef> Valor </mat-header-cell>
-      <mat-cell *matCellDef="let transacao"> {{ transacao.valor | currency }} </mat-cell>
+      <mat-cell *matCellDef="let transacao"> {{ transacao.tipo.descricao === 'Despesa' ? '-' + (transacao.valor | currency) : (transacao.valor | currency) }} </mat-cell>
     </ng-container>
 
     <!-- Coluna Data -->
     <ng-container matColumnDef="data">
       <mat-header-cell *matHeaderCellDef>
         Data
-        <button mat-icon-button (click)="toggleSortOrderByDate()" style="margin-left: 8px;">
-          <mat-icon>{{ sortOrderData === 'desc' ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
-        </button>
       </mat-header-cell>
       <mat-cell *matCellDef="let transacao">
         {{ transacao.data | date:'dd/MM/yyyy' }}
@@ -73,7 +70,7 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>Editar</button>
+          <button mat-menu-item (click)="openDialog(transacao)">Editar</button>
           <button mat-menu-item (click)="deleteTransaction(transacao.id)">Excluir</button>
         </mat-menu>
       </mat-cell>

@@ -18,8 +18,12 @@ export class TransactionService {
     return this.http.get<any>(this.apiUrl, { params });
   }
 
-  putTransacao(transacao: any): Observable<any> {
+  postTransacao(transacao: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, transacao);
+  }
+
+  putTransacao(id: number, transacao: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, transacao);
   }
 
   deleteTransaction(id: number): Observable<any> {
