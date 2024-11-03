@@ -1,0 +1,86 @@
+<mat-toolbar color="primary">
+  <span>UITEC - Lista de Transações</span>
+</mat-toolbar>
+
+<div class="dashboard">
+  <mat-card class="card">
+    <mat-card-content style="display: flex; justify-content: center; align-items: center; height: 100%; padding: 0;">
+      <button mat-raised-button color="primary" style="flex: 1; width: 100%; height: 100%;"
+        (click)="openDialog()">Adicionar Transação</button>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-title>Total de Receitas</mat-card-title>
+    <mat-card-content>
+      <h2>{{ totalReceitas | currency }}</h2>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-title>Total de Despesas</mat-card-title>
+    <mat-card-content>
+      <h2>{{ totalDespesas | currency }}</h2>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-title>Total de Transações</mat-card-title>
+    <mat-card-content>
+      <h2>{{ quantidadeTransacoes }}</h2>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container">
+  <mat-table [dataSource]="transacoes" class="mat-elevation-z8">
+    <!-- Coluna Tipo -->
+    <ng-container matColumnDef="tipo">
+      <mat-header-cell *matHeaderCellDef> Categoria </mat-header-cell>
+      <mat-cell *matCellDef="let transacao"> {{ transacao.categoria.descricao }} </mat-cell>
+    </ng-container>
+
+    <!-- Coluna Valor -->
+    <ng-container matColumnDef="valor">
+      <mat-header-cell *matHeaderCellDef> Valor </mat-header-cell>
+      <mat-cell *matCellDef="let transacao"> {{ transacao.valor | currency }} </mat-cell>
+    </ng-container>
+
+    <!-- Coluna Data -->
+    <ng-container matColumnDef="data">
+      <mat-header-cell *matHeaderCellDef>
+        Data
+        <button mat-icon-button (click)="toggleSortOrderByDate()" style="margin-left: 8px;">
+          <mat-icon>{{ sortOrderData === 'desc' ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
+        </button>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let transacao">
+        {{ transacao.data | date:'dd/MM/yyyy' }}
+      </mat-cell>
+    </ng-container>
+
+    <!-- Coluna Categoria -->
+    <ng-container matColumnDef="categoria">
+      <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+      <mat-cell *matCellDef="let transacao"> {{ transacao.tipo.descricao }} </mat-cell>
+    </ng-container>
+
+    <!-- Coluna Ações -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Ações </mat-header-cell>
+      <mat-cell *matCellDef="let transacao">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Editar</button>
+          <button mat-menu-item (click)="deleteTransaction(transacao.id)">Excluir</button>
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Cabeçalho e Rodapé da Tabela -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
